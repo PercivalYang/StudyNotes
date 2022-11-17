@@ -87,7 +87,7 @@ cout << 5 << endl // 将数字5转换为字符串 "5"，发送给stream输出到
 ## Initialize from contents of struct
 ![fig1](/i/1739353b-bd8f-4c98-a3bc-792639998949.jpg)
 
-# Reference
+# Reference(引用)
 - 来看下面的例子，区分Reference和Copy：
 ![](/i/9c4074a9-1a5a-4fd5-9c0f-a1618522c24f.jpg)
 - Reference to variables
@@ -114,3 +114,45 @@ int& thisWontWork = 5 // Error!
   ![](https://gitee.com/percivalyang/images/raw/master/images/202211131948280.jpg)
   - 先看函数返回的是整数的Reference，函数内部返回的则是vec[0]，结合下方`front(number)`后number的第一个元素被修改为4。
   - 
+
+# Memory
+- 例如`array`这样很占用内存的数据，在使用完后为了让它不再占用内存，可以使用：
+```cpp
+delete[] my_int_array;
+```
+# Pointer(指针)
+  - 假设有指针`ptr`指向一个目标的地址，当我们想获取目标中的member variable `var`时，格式如下：
+  ```*ptr.var == ptr->var```，两种方式等效
+  - **`int *` is the type of an int array variable**
+    ```cpp
+    int *my_int_array = new int[10] //my_int_array is the type of int array variable
+    int first_element = my_int_array[0]
+    ```
+# Class
+  - Difference between `class` and `struct`:
+    - `struct`就像是一堆暴露在外的数据集合，并且调用前要先Initialize `struct` variables；而`class`有着很强的encapsulations barrier(private element)，仅提供给用户便捷的API供使用
+## Constructor and Destructor
+  - Constructor还可以通过Initializer list 来construction,例如：
+  ```cpp
+  Student::Student(): name(""), age{0}, state{""} {} //注意()后的冒号，和最后的{}
+  Student::Student(string name, int age, string state):{
+      name{name}, age{age}, state{state} {}
+      }
+  ```
+  - Destructor是为了减少内存占用，在class中的member out of scope时将它从内存中delete
+    - 删除变量 `delete[] my_var`
+    - 在class内的形式为`~ClassName()`
+## Template class
+  - 和Java里的generic type一个理解，在C++中的syntax如下：
+  ```cpp
+  template<typename T> class my_vector<T>{};
+  ```
+
+# Some details
+## g++
+- `g++ -c vector.cpp main.cpp`: complie vector.cpp和main.cpp，其中`-c`是complie的简写
+- `g++ vector.o main.o -o output`: 链接多个文件生成一个可执行的binary file`output`
+## Header Files
+- `Interface`常放在header files中，而其对应的`Implements`存放于cpp files中。在main.cpp中习惯于包含要用到的header files,例如`#include "vector.h"`。Q: **main.cpp怎么找到interface对应的implements？**
+- A: 在Header Files 中包含Interface的implements文件，如在`vector.h`中`#include "vector.cpp"`
+## size_t
