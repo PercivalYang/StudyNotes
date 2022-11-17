@@ -113,17 +113,4 @@ int& thisWontWork = 5 // Error!
 - Reference的一些用法：
   ![](https://gitee.com/percivalyang/images/raw/master/images/202211131948280.jpg)
   - 先看函数返回的是整数的Reference，函数内部返回的则是vec[0]，结合下方`front(number)`后number的第一个元素被修改为4。
-# const
-- 当声明一个variable为`const`类型时，表示该variable在initialize后就无法被更改
-- 不能将非`const`的Reference指向一个`const` variable，例如：
-```cpp
-const std::vector<int> c_vec{7,8};
-std::vector<int>& r_vec = c_vec // Error!
-```
-- subtleties(细节处):
-  - 非`const`的`auto`变量，可以copy`const`的变量(对Reference同理)，如下：
-  ```cpp
-  const std::vector<int> c_vec{2,3}
-  auto copy = c_vec // copy不是const类型
-  const auto copy = c_vec // copy是const类型
-  ```
+  - 
