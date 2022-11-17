@@ -113,14 +113,17 @@ int& thisWontWork = 5 // Error!
 - Reference的一些用法：
   ![](https://gitee.com/percivalyang/images/raw/master/images/202211131948280.jpg)
   - 先看函数返回的是整数的Reference，函数内部返回的则是vec[0]，结合下方`front(number)`后number的第一个元素被修改为4。
-  - 
+  - **TODO：这里漏了东西，有时间把他补上！！(课程地址：https://github.com/ChristosBouronikos/typora-nord-theme.git*)*
 
 # Memory
 - 例如`array`这样很占用内存的数据，在使用完后为了让它不再占用内存，可以使用：
 ```cpp
 delete[] my_int_array;
 ```
-# Pointer(指针)
+
+
+
+# Pointer
   - 假设有指针`ptr`指向一个目标的地址，当我们想获取目标中的member variable `var`时，格式如下：
   ```*ptr.var == ptr->var```，两种方式等效
   - **`int *` is the type of an int array variable**
@@ -128,6 +131,18 @@ delete[] my_int_array;
     int *my_int_array = new int[10] //my_int_array is the type of int array variable
     int first_element = my_int_array[0]
     ```
+  - `nullptr` 代表空指针
+  - `void*`
+  - Dereference(解引用): 假设ptr是个指针，`*ptr`即解引用获取该指针存储的地址所指向的数据
+  - 通过Pointer来Ask memory：
+  ```cpp
+    // char是一个byte
+    char* buffer = new char[8] // buffer向memory申请一组8byte的空间
+    // buffer是指针，指向该地址的开头
+  ```
+
+
+
 # Class
   - Difference between `class` and `struct`:
     - `struct`就像是一堆暴露在外的数据集合，并且调用前要先Initialize `struct` variables；而`class`有着很强的encapsulations barrier(private element)，仅提供给用户便捷的API供使用
@@ -143,10 +158,24 @@ delete[] my_int_array;
     - 删除变量 `delete[] my_var`
     - 在class内的形式为`~ClassName()`
 ## Template class
-  - 和Java里的generic type一个理解，在C++中的syntax如下：
+  - Template class不仅有Java中的Generic type一样的功能，同时还具有其他的用法
+      - 先来看看generic type 的用法
+      ```cpp
+      template<typename T> class my_vector<T>{};
+      ```
+  - 另一种用法，定义一个class`MyArray`如下：
   ```cpp
-  template<typename T> class my_vector<T>{};
+    template<typename T, int N>
+    class MyArray{
+        private:
+        // T 为generic type的用法
+            T m_Array[N]; // 可以用template中的元素来初始化class
+    }
+    int main(){
+        MyArray<5> array; // Declaration时初始化MyArray大小
+    }
   ```
+   - 另外`template`在程式中，只有当call它时才会发送code，即: "Template don't emit code until instantiated"
 
 # Some details
 ## g++
