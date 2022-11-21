@@ -1,72 +1,4 @@
-# Stream
-## Output Stream
-- type: `std::ostream`
-- 只能通过`<<`传送数据
-  - 将数据转换为`string`发送给`stream`
-```cpp
-cout << 5 << endl // 将数字5转换为字符串 "5"，发送给stream输出到console
-```
-- `std::ofstream`: 将Output stream连接到文件，例如：
-  ```cpp
-  std::ofstream out("out.txt")
-  std::cout << 5 << std::endl // 5转换为"5"，输入到out.txt文件中
-  ```
-## Output File Stream
-- type: `std::ofstream` (注意和上面的`std::ostream`区分！！)
-  - Note：
-  ```cpp
-  void writeToOut(std::ostream& anyOutStream, int number){
-       // std::ostream 改为 std::ofstream 的话，传入cout会发生TypeError
-       // 函数目的是输出数据给anyOutStream
-       anyOutStream << number << endl;
-  }
-  int main(){
-       std::ofstream fileOut("out.txt");
-       int myNum = 42;
-       writeToOut(std::cout, myNum);
-       writeToOut(fileOut, myNum);
-  ```
-
-## Input Stream
-- type: `std::istream`
-- `std::cin`:
-  - 从命令行接收输入，遇到enter结束；
-  - 每个`>>`遇到whiterspace时停止，例如`std::cin >> a >> b >> c`
-## Input File Stream
-- type: `std::ifstream`
-- 使用任何Input Stream前都要先Initialize
-## Othre Stream
-- StringStrems
-  - Input: `std::istringstream`
-  - Output: `std::ostringstream`
-    - read from it word/type by word/type
-    - e.g.：
-      ``` cpp
-      ...
-      {
-        std::ostringstream formatter;
-        formatter << name << ", age " << age;
-        if (loveCpp) formatter << ", rocks.";
-        else formatter << " could be better";
-        return formatter.str();
-      }
-      ```
-    - 感觉有点像StringBuffer和StringBuilder？
-  - Same as i/ostreams
-- 
-## std::getline(istream& is, string& str, char delim)
-- 参数解释：
-  - `is`: Stream to read from;
-  - `str`: Place where input from stream is stored
-  - `delim`: When to stop reading (default: `\n`)
-- 工作步骤：
-  - 清空`str`；
-  - 从`is`中提取chars并保存到`str`中直到以下条件发生：
-    1. `is`接受到文件结束的信号，给`is`设置EOF bit(可通过`is.eof()`check)；
-    2. 下一个`is`中的char是`delim`，提取出来但不store；
-    3. `str`到了max size，给`is`设置FAIL bit(可通过`is.fail()`check)
-  - 如果`is`提取不到任何char，设置FAIL bit
-- `>>`和enhance for loop每次只提取single world or type，如果要读取一整行则用`std::getline`
+${toc}
 # Initialize
 ## Uniform initialize
 - 使用花括号进行initialize，适用于所有type，可以在declaration时进行initialize
@@ -87,7 +19,7 @@ cout << 5 << endl // 将数字5转换为字符串 "5"，发送给stream输出到
 ## Initialize from contents of struct
 ![fig1](/i/1739353b-bd8f-4c98-a3bc-792639998949.jpg)
 
-# Reference(引用)
+# Reference
 - 来看下面的例子，区分Reference和Copy：
 ![](/i/9c4074a9-1a5a-4fd5-9c0f-a1618522c24f.jpg)
 - Reference to variables
@@ -185,3 +117,30 @@ delete[] my_int_array;
 - `Interface`常放在header files中，而其对应的`Implements`存放于cpp files中。在main.cpp中习惯于包含要用到的header files,例如`#include "vector.h"`。Q: **main.cpp怎么找到interface对应的implements？**
 - A: 在Header Files 中包含Interface的implements文件，如在`vector.h`中`#include "vector.cpp"`
 ## size_t
+
+# Scope 
+- Scope(作用域),在前面Class中的Destructor中有提到：  
+> 在class中的member out of scope时将它从内存中delete
+- Scope的范围由花括号{}规定，变量名的有效范围**从名字的声明开始，到名字所在的Scope结束为止**，因此到这我们就可以理解前面的out of scope是什么意思了，举个例子：
+    ```cpp
+    int main(){
+        int num = 3;
+        std::cout << num << std::endl;
+        return 0;
+    }
+    ```
+    - 程式中`num`的Scope就是在`main`的花括号内，而`main`则是一个global scope的名字，即在整个程式内`main`都是有效的。
+## Nested Scope
+  - 来看个例子：
+  ```cpp
+  int reused = 32; // 全局变量
+  int main(){
+    std::cout << reused << std::endl;
+    int reused = 0; // 新建局部变量，覆盖了全局变量
+    std::cout << reused << std::endl;
+    // 如果此时想要访问全局变量的reused
+    std::cout << ::reused << std::endl;
+  }
+  ```
+  - 可以看出对全局变量访问的形式是`::reused`，因为全局Scope本身没有名字，因此`::`左边为空。
+
