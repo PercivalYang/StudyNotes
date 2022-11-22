@@ -31,4 +31,11 @@ variables, function parameters, and return addresses
 - 第三步: 初始化一些memory用来作为Program's heap, C 语言中的heap通过`malloc()`和`free()`来动态的收集、释放data；
 - 第四步：同样还会对I/O进行初始化，例如每个Process默认的三个file descriptors: stdin, stdout, error。
 - 最后：上述完成后，执行Program需要指定一个**entry-point**，通常是`main()`，然后通过**mechanism**跳转到entry-point**后，OS会将CPU的权限转交给这个new-created process，进而执行program
-- 
+### States
+- 一个process可以具备三种状态：
+    - Running: 正在执行instructions;
+    - Ready: OS还没执行，但process已经准备好;
+    - **Blocked**: Process表现出某些operation(例如像disk发送I/O请求，此时不再使用CPU)，会将此process锁住，直到如I/O执行完毕再继续.
+- 直观的流程图如下：  
+    ![State](./imgs/StateTransitions.png =200x200)
+
