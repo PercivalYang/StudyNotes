@@ -1,4 +1,5 @@
 # Study Notes
+## CS
 ### CPP: CS106L
 - [STL](./cs106l/STL.md)
 - [const](./cs106l/const.md)
@@ -12,4 +13,6 @@
 ### Data Structure:
 #### CS61B
 #### LeetCode
-
+### Operating System
+- [Note](./OperatingSystem/Notes.md)
+- [gcc](./OperatingSystem/gcc.md)
