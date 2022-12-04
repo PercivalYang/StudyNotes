@@ -1,3 +1,5 @@
+[toc]
+
 # Installation
 - 关于包的说明：
     - `openjdk-18-jre-headless`: jre(Java Runtime Enviroment)只能运行Java环境，不能做开发，而`headless`代表运行没有个GUI的Java Apllication
