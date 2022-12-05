@@ -108,9 +108,33 @@ public interface Predicate<T> {
 - 缺点：`Optional Type`必须要call`.get()`，才能获取其内部的value，增加code verbose
 
 ## File & Path
-- 文件的读取步骤：
+- 文件的读取步骤：  
 ![FileRead](./imgs/FileRead.png =400x300) 
 ### File
+
+#### Readers/Writers
+- `Readers`:
+    ```java
+    Reader reader =
+       Files.newBufferedReader(Path.of("test"), StandardCharsets.UTF_8);
+    while (reader.read(data) != -1) {
+     useData(data); // useData是抽象的,此处举例用
+    }
+    reader.close();
+    ```
+- `Writers` & `BufferedWriter`:
+    ```java
+    Writer writer =
+       Files.newBufferedWriter(Path.of("test"),StandardCharsets.UTF_8);
+    writer.write("hello, world");
+    writer.write("Hello, ");
+    writer.write("world!"); // 虽然调用了两次write,但实际只想output stream write了一次，因为BufferedWriter在内存中的缓存大小是600bytes
+    writer.flush();
+    writer.close();
+    ```
+    - `.flush()`的作用是立即empty out `BufferedWriter`在内存中的缓存
+
+
 #### Methods & Types
 - `InputStream`
     - `.read(data)`: 读取数据到`data`中
@@ -122,10 +146,70 @@ public interface Predicate<T> {
 
 #### Type
 
+### Unicode encodings
+#### UTF-8
+- At least 8 bits to store each character. Up to 24 bits each for non-ASCII characters
+#### UTF-16
+- At least 16 bits, including lower-order ASCII and higher-oder non-ASCII
+
 ### Path
-- `Path.of()`
+- `Path.of(String path1, String path2)`: 拼接路径`path1`, `path2`
+
+### Prevent resource leaks
+- 为什么要关闭通过stream打开的文件：
+    - 避免资源浪费，占用系统资源;
+    - 操作系统会限制打开的文件个数；
+    - 确保程序运行后文件保持最新版本，而非因出错导致`Writer`没有关闭，文件无法更新
+#### `try-catch-finally`
+```java
+Writer writer;
+try {
+  writer = Files.newBufferedWriter(Path.of("test"));
+  writer.write("Hello, world!");
+} catch (IOException e) {
+  e.printStackTrace();
+} finally {
+  writer.close();
+}
+```
+- `finally`语句保证即使在程序出错下，创建的`BufferedWriter`实例仍然可以关闭
+#### `try-with-resources`
+- 相比`finally`目前更常用的方法
+```java
+// Copy the contents of "foo" to "bar"
+try (InputStream in   = Files.newInputStream(Path.of("foo"));
+     OutputStream out = Files.newOutputStream(Path.of("bar"))) {
+  out.write(in.readAllBytes());
+}
+```
+- 在try的body block前的圆括号内进行Initialize,保证文件关闭与`try`退出同步进行
+#### `Closeable` and `AutoCloseable`
+- 只有`Closeable` and `AutoCloseable`的变量才能使用`try-with-resources`
+- `Stream`，`Reader`, `Writer`, `InputStream`, `OutputStream`都implements了`Closeable`，即implements了`close()`(could throw an `IOException`)
+- `AutoCloseable` 不会throw `IOException`
 ### Further Reading
 - [Files JavaDoc](https://docs.oracle.com/javase/10/docs/api/java/nio/file/Files.html)
 - [Path JavaDoc](https://docs.oracle.com/javase/10/docs/api/java/nio/file/Path.html)
 - [Paths JavaDoc](https://docs.oracle.com/javase/10/docs/api/java/nio/file/Paths.html)
 - [StandardOpenOption JavaDoc](https://docs.oracle.com/javase/10/docs/api/java/nio/file/StandardOpenOption.html)
+- [Reader JavaDoc](https://docs.oracle.com/javase/10/docs/api/java/io/Reader.html) 
+- [Writer JavaDoc](https://docs.oracle.com/javase/10/docs/api/java/io/Writer.html) 
+- [Unicode](https://unicode.org/standard/standard.html) 
+- [BufferedReader JavaDoc](https://docs.oracle.com/javase/10/docs/api/java/io/BufferedReader.htm) 
+- [BufferedWriter JavaDoc](https://docs.oracle.com/javase/10/docs/api/java/io/BufferedWriter.htm) 
+- [Closeable JavaDoc](https://docs.oracle.com/javase/10/docs/api/java/io/Closeable.html) 
+- [AutoCloseable JavaDoc](https://docs.oracle.com/javase/10/docs/api/java/io/AutoCloseable.html) 
+- [tryResourceClose JavaDoc](https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html) 
+- [finally JavaDoc](https://docs.oracle.com/javase/tutorial/essential/exceptions/finally.html) 
+
+## Data Serialization(数据序列化)
+### JSON
+- Library: `Jackson`
+    - serialize: `ObjectMapper.writeObject()`
+    - deserialize: `ObjectMapper.readValue()`
+
+### XML
+- Library: `JAXB`
+    - serialize: `Marshaller.marshal`
+    - deserialize: `Unmarshaller.unmarshal`
+
