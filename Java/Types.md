@@ -1,3 +1,4 @@
+[toc]
 ## Exceptions
 - Java的error-handling框架定义两个class来表示abnormal software events：
     - `Error class`：表示严重的问题，
@@ -55,7 +56,33 @@ The Date class represents a specific instance in time. We can instantiate a new 
     Date date = new Date(); // 默认获取当前时间
 ```
 
-## Calendar
+### Clock 
+- `instant()` method of Clock class returns a current instant of Clock object as Instant Class Object
+- Example: ``
+```java
+import java.time.*;
+public class instantMethodDemo {
+	public static void main(String[] args)
+	{
+		ZoneId zoneId = ZoneId.of("Europe/Paris");
+		// create Clock Object by passing zoneID
+		Clock clock = Clock.system(zoneId);
+		// get Instant Object of Clock object using instant() method
+		Instant instantObj = clock.instant();
+		// get ZonedDateTime object from instantObj to get zonal date time
+		ZonedDateTime time = instantObj.atZone(clock.getZone());
+		// print details of Instant Object
+		System.out.println("Instant for class " + clock
+						+ " is " + time.toString());
+	}
+}
+```
+- Output:
+```
+Instant for class SystemClock[Europe/Paris] is 2018-08-21T07:31:13.525+02:00[Europe/Paris]
+```
+
+### Calendar
 The Calendar class is an **abstract class** that provides methods for manipulating date and time. The basic syntax for instantiating a new Calendar object looks like this:
 ```java
     Calendar calendar = Calendar.getInstance();
@@ -87,3 +114,6 @@ The Calendar class is an **abstract class** that provides methods for manipulat
         2. `Pattern pattern = Pattern.compile(emailRegex)`
         3. `Matcher matcher = pattern.matcher("jeff@example.com")`
     - 顺序：`String`->`Pattern`->`Matcher`
+
+# Final 
+![final](https://media.geeksforgeeks.org/wp-content/uploads/20220225104709/FinalkeywordinJava.jpg =500x300) 
