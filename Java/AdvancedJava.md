@@ -213,3 +213,45 @@ try (InputStream in   = Files.newInputStream(Path.of("foo"));
     - serialize: `Marshaller.marshal`
     - deserialize: `Unmarshaller.unmarshal`
 
+# Design Patterns
+## Intuition
+- Single Responsibility Principle: Each class should have only one responsibility.
+- Open-Closed Principle: Software should be open for extension but closed for modification.
+- Liskov Substitution Principle: Objects that implement the same interface should be interchangeable without breaking the program.
+- Interface Segregation Principle: Your code should only depend on interfaces that it actually uses.
+- Dependency Inversion Principle: All parts of your code should depend on interfaces, or abstractions. Implementation details should depend on interfaces, not the other way around.
+## Creational patterns
+### Singleton
+
+## Behavioral patterns
+### Stragety patterns
+- 用一个`Interface`来代表一个任务或者问题，`Interface`的每一种Implementation代表一个Strategy，同时在程序中这些不同的Strategy可以实现互换后不破坏程序正常运行
+
+### Template patterns
+- 在程序中先设计一个`base class`或者`Interface`来囊括任务的主体部分，然后根据任务或问题的不同对`base class`进行extends；
+- 例如`base class`为`Animal`，进而可以extends出`Dog`，`Cat`等不同subclass
+
+## Structural patterns
+### Adapter patterns
+- 程序针对实际生活的问题做出调整，例如Client调用API输入名字时，常规是firstName和lastName一次性输入，而之前的练习中则是分两次输入，因此需要将之前两次输入的`Interface` transform 成另一种`Interface` API供Client调用;
+- 这种transform `Interface` or `API` to another format 就是Adapter patterns
+
+### Decorator patterns
+- 让Client调用API时更精简，例如实例化一个`BufferedReader`的两种方法：
+    - `Files.newBufferedReader(Path path)`
+    - `new BufferedReader(new FileReader(new File(Path path)))`
+- 相比第二种“原始”的实例化，第一种经过精装后使得Client能够更快捷的实例化`BufferedReader`    
+
+## Dependency Injection
+- 中文：依赖注入，在构建constructor的时候
+
+
+# Reflaction
+## Annotations
+- Annotations 为程序提供metadata--对Annotated的代码部分不会造成其他影响
+### 作用
+- 为Java complier提供extra data，以便complier在complie-time检测错误
+- Annotation data在程序运行期间会retain，可以通过Reflection discover them，并且做出相应的actions
+- Annotations can add compile-time information for code generation tools or other tools that plug into the Java compiler.
+
+
