@@ -1,0 +1,4 @@
+- **critical section**: a piece of code that accesses a shared resource, usually a variable or data structure.
+- **race condition**: 代表多个thread同时进入critical section并访问修改shared resource;
+- **indeterminate**: 代表因race condition的原因造成计算机输出不是deterministic,例如两个没有lock的thread计数10000次后总计数不等于20000
+- **mutual exclusion**: 通过lock方法避免race condition
